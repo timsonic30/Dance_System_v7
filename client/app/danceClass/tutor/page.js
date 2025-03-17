@@ -42,17 +42,18 @@ export default function TutorShowcase() {
   }, []);
 
   return (
-    <div>
-      <DanceInstructorProfile
-        oneTeacherdata={oneTeacherdata}
-        showcaseData={showcaseData}
-        showTeacherClassData={showTeacherClassData}
-      />
-      <InstructorShowcase
-        data={data}
-        onDataChange={handleDataChange}
-        teacherClassFromDB={handleTeacherClassData}
-      />
-    </div>
+<div>
+  <DanceInstructorProfile
+    oneTeacherdata={oneTeacherdata}
+    showcaseData={showcaseData}
+    showTeacherClassData={showTeacherClassData}
+  />
+  <InstructorShowcase
+    data={data}
+    onDataChange={handleDataChange}
+    teacherClassFromDB={handleTeacherClassData}
+  />
+</div>
+
   );
 }

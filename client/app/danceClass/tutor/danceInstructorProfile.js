@@ -6,9 +6,9 @@ export default function DanceInstructorProfile({
   const renderContent = () => {
     if (showcaseData) {
       return (
-        <div className="grid md:grid-cols-2 gap-4 items-start">
+        <div className=" flex">
           {" "}
-          <div className="space-y-4">
+          <div className="space-y-4 mr-10">
             {" "}
             <div className="relative">
               <img
@@ -50,26 +50,13 @@ export default function DanceInstructorProfile({
                 {/* Reduced margin-bottom */}
                 {showcaseData.someOneTeacher.nickname} CLASSES SCHEDULE
               </h3>
-              <div className="space-y-4">{renderClassContect()}</div>
-              <div className="flex justify-between mt-4">
-                <button
-                  variant="secondary"
-                  className="bg-zinc-600 hover:bg-zinc-500"
-                >
-                  Previous
-                </button>
-                <button
-                  variant="secondary"
-                  className="bg-zinc-600 hover:bg-zinc-500"
-                >
-                  Next
-                </button>
-              </div>
+              <div className="space-y-4 h-90 overflow-y-scroll">{renderClassContect()}</div>
+          
             </section>
           </div>
         </div>
       );
-    } else if (oneTeacherdata) {
+    }      else if (oneTeacherdata) {
       return (
         <div className="grid md:grid-cols-2 gap-4 items-start">
           {" "}
@@ -219,7 +206,7 @@ export default function DanceInstructorProfile({
           </div>
         </div>
       );
-    }
+     }
   };
 
   const renderClassContect = () => {
@@ -229,6 +216,41 @@ export default function DanceInstructorProfile({
         const date = new Date(element.date); // 將日期字串轉換為 Date 物件
         const month = date.getMonth() + 1; // getMonth() 返回 0-11 的月份索引，因此需要加 1
 
+        const handleButtonClick = (id, classprice) => {
+          const detail = id;
+          const type = 'Class';
+          const price = classprice;
+          const userId = '67d7cff0159b3e97b515661f';
+
+          fetch('http://localhost:3030/danceclass/bookingClass', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', // 設置內容類型為 JSON
+            },
+            body: JSON.stringify({
+              detail,  // 傳送 detail（課程 ID）
+              price,   // 傳送 price（價格）
+              type,    // 傳送類型
+              userId,  // 傳送用戶 ID
+            }),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error('預訂課程失敗');
+              }
+            })
+            .then((data) => {
+              console.log('預訂成功：', data);
+              // 成功後處理邏輯（如顯示成功訊息或更新畫面）
+            })
+            .catch((error) => {
+              console.error('錯誤：', error);
+              // 處理錯誤（如顯示錯誤訊息）
+            });
+
+        };
         return (
           <div
             key={element._id} // React 渲染列表需要唯一的 key
@@ -259,7 +281,10 @@ export default function DanceInstructorProfile({
                   </div>
                 </div>
               </div>
-              <button variant="outline" className="whitespace-nowrap">
+              <button
+                className="border border-white text-white px-4 py-2 hover:bg-white hover:text-black transition duration-200 cursor-pointer"
+                onClick={() => handleButtonClick(element._id, element.price)}
+              >
                 Book This Class
               </button>
             </div>
@@ -271,7 +296,7 @@ export default function DanceInstructorProfile({
   };
 
   return (
-    <div className="bg-zinc-700 text-white min-h-screen">
+    <div className="bg-zinc-700 text-white">
       <div className="container mx-auto px-4 py-8 md:py-12">
         {renderContent()}
       </div>
