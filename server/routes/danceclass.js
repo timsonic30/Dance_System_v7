@@ -3,12 +3,13 @@ const express = require("express");
 const router = express.Router();
 const DanceClass = require("../models/danceClass");
 const Teacher = require("../models/teacher");
+const Transaction = require("../models/transaction");
 
 //交給前端class資料
 router.get("/", async (req, res, next) => {
   try {
     let classData = await DanceClass.find({}).exec();
-    console.log(classData);
+    //console.log(classData);
     return res.send({ classData });
   } catch (e) {
     return res.send(e);
@@ -168,6 +169,17 @@ router.get("/:tutorid", async (req, res, next) => {
     const tutorId = req.params.tutorid;
     const tutorClass = await DanceClass.find({ teacher: tutorId }).exec();
     return res.send({ tutorClass });
+  } catch (e) {
+    console.error("Error during database operation (/:tutorid):", e.message);
+    return res.status(500).send({ error: e.message });
+  }
+});
+//=============向transaction collection取出某個會員的資料
+router.get("/transaction/:userId", async (req, res, next) => {
+  try {
+    const userId = req.params.userId;
+    const userTransactions = await Transaction.find({ userId: userId }).exec();
+    return res.send({ userTransactions });
   } catch (e) {
     console.error("Error during database operation (/:tutorid):", e.message);
     return res.status(500).send({ error: e.message });
